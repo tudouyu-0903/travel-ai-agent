@@ -1,0 +1,34 @@
+spring:
+  ai:
+    mcp:
+      server:
+        name: yu-image-search-mcp-server
+        version: 0.0.1
+        type: SYNC
+        stdio: false
+        sse:
+          enabled: true
+          endpoint: /sse
+          message-endpoint: /mcp/message
+server:
+  tomcat:
+    # 增加异步超时时间到 10 分钟
+    async-timeout: 600000
+    threads:
+      max: 200
+      min-spare: 10
+    # 增加连接超时时间
+    connection-timeout: 60000
+    # 添加 keep-alive 配置
+    keep-alive-timeout: 120000
+    max-keep-alive-requests: 10000
+
+  servlet:
+    session:
+      timeout: 60m
+    async:
+      request-timeout: 600000
+    # 添加错误页面配置
+    error:
+      include-stacktrace: never
+
