@@ -28,8 +28,12 @@ spring:
 #        max-document-batch-size: 10000
     mcp:
       client:
+        request-timeout: 120s
         stdio:
           servers-configuration: classpath:mcp-server.json
+
+
+
   datasource:
     url: jdbc:postgresql://rm-cn-j8g4s92jp0001q8o.rwlb.rds.aliyuncs.com:5432/traver-ai-agent
     username: my_user
@@ -97,3 +101,11 @@ aliyun:
     endpoint: ${ALIYUN_OSS_ENDPOINT:https://oss-cn-beijing.aliyuncs.com}
     bucketName: ${ALIYUN_OSS_BUCKET:java-cxy}
     region: ${ALIYUN_OSS_REGION:cn-beijing}
+
+logging:
+  level:
+    com.cxy.travelaiagent.App.TravelApp: INFO
+    org.springframework.ai.model.tool: DEBUG
+    org.springframework.ai.autoconfigure.mcp: DEBUG
+    org.springframework.ai.mcp: DEBUG
+    io.modelcontextprotocol: DEBUG

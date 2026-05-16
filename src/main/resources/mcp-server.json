@@ -1,15 +1,13 @@
 {
   "mcpServers": {
-    "yu-image-search-mcp-server": {
-      "command": "java",
+    "amap-maps": {
+      "command": "D:\\nodejs\\node.exe",
       "args": [
-        "-Dspring.ai.mcp.server.stdio=true",
-        "-Dspring.main.web-application-type=none",
-        "-Dlogging.pattern.console=",
-        "-jar",
-        "yu-image-search-mcp-server/target/yu-image-search-mcp-server-0.0.1-SNAPSHOT.jar"
+        "D:\\myProject\\yu-ai-agent\\.npm-cache\\_npx\\3f19108e4acac271\\node_modules\\@amap\\amap-maps-mcp-server\\build\\index.js"
       ],
-      "env": {}
+      "env": {
+        "AMAP_MAPS_API_KEY": "8c8de165053e5e3160a2236acaa1e30e"
+      }
     }
   }
 }

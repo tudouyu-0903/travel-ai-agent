@@ -84,4 +84,19 @@ class TravelAppTest {
         String answer = travelApp.doChatWithMcp(message, chatId);
         Assertions.assertNotNull(answer);
     }
+
+
+    @Test
+    void doChatWithMapMcp() {
+        String chatId = UUID.randomUUID().toString();
+        // 测试地图 MCP
+        String message = "我的另一半居住在上海静安区，请帮我找到 5 公里内合适的约会地点";
+        String answer = travelApp.doChatWithMapMcp(message, chatId);
+        Assertions.assertNotNull(answer);
+        Assertions.assertFalse(answer.isEmpty());
+        System.out.println("地图 MCP 响应: " + answer);
+    }
+
+
+
 }
