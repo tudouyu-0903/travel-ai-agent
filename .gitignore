@@ -1,7 +1,13 @@
-###curtom###
+### custom ###
 application-local.yml
-tmp
+application-secret.yml
+mcp-server-local.json
+.env
+.env.*
+!.env.example
+tmp/
 .m2/
+.npm-cache/
 ${project.build.directory}/
 tmpfile/
 yu-agent-frontend/dist/
@@ -23,7 +29,7 @@ target/
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
+.idea/
 *.iws
 *.iml
 *.ipr

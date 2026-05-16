@@ -5,9 +5,7 @@
       "args": [
         "D:\\myProject\\yu-ai-agent\\.npm-cache\\_npx\\3f19108e4acac271\\node_modules\\@amap\\amap-maps-mcp-server\\build\\index.js"
       ],
-      "env": {
-        "AMAP_MAPS_API_KEY": "8c8de165053e5e3160a2236acaa1e30e"
-      }
+      "env": {}
     }
   }
 }

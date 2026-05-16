@@ -5,7 +5,7 @@ spring:
     active: local
   ai:
     dashscope:
-      api-key: ${DASHSCOPE_API_KEY:${API-KEY:}}
+      api-key: ${DASHSCOPE_API_KEY:}
       chat:
         options:
           model: qwen-max
@@ -35,16 +35,16 @@ spring:
 
 
   datasource:
-    url: jdbc:postgresql://rm-cn-j8g4s92jp0001q8o.rwlb.rds.aliyuncs.com:5432/traver-ai-agent
-    username: my_user
-    password: 123456Chen!
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/traver-ai-agent}
+    username: ${POSTGRES_USERNAME:postgres}
+    password: ${POSTGRES_PASSWORD:}
     driver-class-name: org.postgresql.Driver
   data:
     redis:
       database: 1
-      host: 139.129.36.181
-      port: 6379
-      password: Redis@StrongPass2025
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
       timeout: 5000
       lettuce:
         pool:
@@ -85,7 +85,7 @@ knife4j:
 
 # searchApi
 search-api:
-  api-key: vh8UaQz6M8vz1F7QUGVihp7k
+  api-key: ${SEARCH_API_KEY:}
 
 
 travel:
