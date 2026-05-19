@@ -102,6 +102,41 @@ a {
   overflow: hidden;
 }
 
+.home-auth-actions {
+  position: absolute;
+  top: 28px;
+  right: 28px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.primary-link,
+.user-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  border-radius: 12px;
+}
+
+.primary-link {
+  padding: 0 18px;
+  color: white;
+  font-weight: 700;
+  background: linear-gradient(135deg, #2f9d7e, #3f8dc2);
+  box-shadow: 0 14px 30px rgba(47, 143, 123, 0.2);
+}
+
+.user-pill {
+  padding: 0 14px;
+  color: #1e6655;
+  background: rgba(47, 143, 123, 0.12);
+  border: 1px solid rgba(47, 143, 123, 0.18);
+  font-weight: 700;
+}
+
 .hero-card::after {
   content: '';
   position: absolute;
@@ -445,6 +480,83 @@ a {
   opacity: 0.6;
 }
 
+.auth-page {
+  display: grid;
+  place-items: center;
+}
+
+.auth-panel {
+  width: min(460px, 100%);
+  border: 1px solid var(--panel-border);
+  border-radius: 24px;
+  padding: 34px;
+  background: var(--bg-soft);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px) saturate(1.08);
+}
+
+.auth-back {
+  float: right;
+}
+
+.auth-panel h1 {
+  margin: 0 0 24px;
+  font-family: 'ZCOOL XiaoWei', serif;
+  font-size: 44px;
+  font-weight: 400;
+}
+
+.auth-form {
+  display: grid;
+  gap: 14px;
+}
+
+.auth-form label {
+  display: grid;
+  gap: 8px;
+  color: var(--text-soft);
+  font-weight: 700;
+}
+
+.auth-form input {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid rgba(84, 116, 91, 0.18);
+  border-radius: 12px;
+  padding: 0 14px;
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.86);
+  outline: none;
+  font: inherit;
+}
+
+.auth-form input:focus {
+  border-color: rgba(47, 143, 123, 0.46);
+  box-shadow: 0 0 0 4px rgba(47, 143, 123, 0.1);
+}
+
+.auth-submit {
+  min-height: 50px;
+  margin-top: 6px;
+}
+
+.auth-error {
+  margin: 0;
+  color: #b42318;
+  line-height: 1.6;
+}
+
+.auth-switch {
+  margin: 20px 0 0;
+  color: var(--text-soft);
+  text-align: center;
+}
+
+.auth-switch a {
+  color: #1e6655;
+  font-weight: 700;
+}
+
 @keyframes pulse {
   0%,
   100% {
@@ -468,6 +580,13 @@ a {
 
   .hero-card {
     padding: 28px;
+  }
+
+  .home-auth-actions {
+    position: static;
+    justify-content: flex-end;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
   }
 
   .chat-shell {

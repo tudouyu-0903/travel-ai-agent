@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class YuAgent extends ToolCallAgent {
+public class TravelAgent extends ToolCallAgent {
 
-    public YuAgent(
+    public TravelAgent(
             ToolCallback[] availableTools,
             ChatModel dashscopeChatModel,
             PDFGenerationTool pdfGenerationTool,

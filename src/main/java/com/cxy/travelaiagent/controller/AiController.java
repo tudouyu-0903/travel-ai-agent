@@ -1,7 +1,7 @@
 package com.cxy.travelaiagent.controller;
 
 import com.cxy.travelaiagent.App.TravelApp;
-import com.cxy.travelaiagent.agent.YuAgent;
+import com.cxy.travelaiagent.agent.TravelAgent;
 import jakarta.annotation.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +18,7 @@ public class AiController {
     private TravelApp travelApp;
 
     @Resource
-    private YuAgent yuAgent;
+    private TravelAgent travelAgent;
 
     @GetMapping("/travel_app/chat/sync")
     public String doChatWithTravelAppSync(String message, String chatId) {
@@ -57,6 +57,6 @@ public class AiController {
 
     @GetMapping(value = "/manus/chat")
     public SseEmitter doChatWithManus(String message) {
-        return yuAgent.runStream(message);
+        return travelAgent.runStream(message);
     }
 }

@@ -1,11 +1,22 @@
 <template>
   <div class="home-page page-frame">
     <div class="hero-card">
+      <div class="home-auth-actions">
+        <template v-if="user">
+          <span class="user-pill">{{ user.nickname || user.username }}</span>
+          <button class="ghost-button" type="button" @click="handleLogout">退出</button>
+        </template>
+        <template v-else>
+          <router-link class="ghost-button" to="/login">登录</router-link>
+          <router-link class="primary-link" to="/register">注册</router-link>
+        </template>
+      </div>
+
       <p class="eyebrow">YU AI TRAVEL AGENT</p>
       <h1>选择你的智能旅游助手入口</h1>
       <p class="hero-text">
-        一个面向旅行规划的 AI 工作台。你可以进入智能旅游助手，基于 RAG 知识库获取 2025 热门城市建议；
-        也可以进入任务型 Agent，让它调用搜索、网页抓取、文件和 PDF 工具完成更复杂的旅行任务。
+        一个面向旅行规划的 AI 工作台。你可以直接进入智能旅游助手获取路线、预算和行程建议；
+        任务型 Agent 会调用搜索、网页抓取、文件和 PDF 工具，因此需要登录后使用。
       </p>
 
       <div class="app-grid">
@@ -16,11 +27,11 @@
           <span class="app-link">进入应用</span>
         </router-link>
 
-        <router-link class="app-entry manus-theme" to="/manus">
+        <router-link class="app-entry manus-theme" :to="manusTarget">
           <span class="app-badge">02</span>
           <h2>旅游任务 Agent</h2>
           <p>适合联网检索、整理攻略、下载资料、生成旅行 PDF 或处理更开放的任务。</p>
-          <span class="app-link">进入应用</span>
+          <span class="app-link">{{ user ? '进入应用' : '登录后使用' }}</span>
         </router-link>
       </div>
     </div>
@@ -28,4 +39,26 @@
 </template>
 
 <script setup>
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { getCurrentUser, logout } from '../services/auth';
+
+const user = ref(getCurrentUser());
+const manusTarget = computed(() => user.value ? '/manus' : { path: '/login', query: { redirect: '/manus' } });
+
+function syncUser() {
+  user.value = getCurrentUser();
+}
+
+async function handleLogout() {
+  await logout();
+  syncUser();
+}
+
+onMounted(() => {
+  window.addEventListener('auth-changed', syncUser);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('auth-changed', syncUser);
+});
 </script>

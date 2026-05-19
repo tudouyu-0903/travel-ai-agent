@@ -17,15 +17,15 @@ import java.util.List;
  * 向量数据库初始化，基于内存的向量数据库bean
  */
 @Configuration
-@Profile("memory-vector")
+@Profile("!pg-vector")
 public class TraverVerctorConfig {
     @Resource
     private TraverAppDocumentLoader traverAppDocumentLoader;
     @Resource
     private  MyKeyWordEnricher myKeyWordEnricher;
-    @Bean
+    @Bean("pgVectorStore")
     @Lazy
-    VectorStore loveVectorStore(EmbeddingModel dashscopeEmbeddingModel) {
+    VectorStore simpleVectorStore(EmbeddingModel dashscopeEmbeddingModel) {
 //        调用对应大模型的embedding模型用于创建向量
         SimpleVectorStore simpleVectorStore = SimpleVectorStore.builder(dashscopeEmbeddingModel).build();
 //        获取加载的的文件列表

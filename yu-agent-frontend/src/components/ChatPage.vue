@@ -36,12 +36,12 @@
               :class="{ active: webSearchEnabled }"
               type="button"
               :disabled="loading"
-              @click="webSearchEnabled = !webSearchEnabled"
               :title="webSearchEnabled ? '已开启联网搜索' : '点击开启联网搜索'"
+              @click="webSearchEnabled = !webSearchEnabled"
             >
               <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="11" cy="11" r="8"/>
-                <path d="M21 21l-4.35-4.35"/>
+                <circle cx="11" cy="11" r="8" />
+                <path d="M21 21l-4.35-4.35" />
               </svg>
               <span>联网搜索</span>
             </button>
@@ -64,7 +64,8 @@
 </template>
 
 <script setup>
-import { onBeforeUnmount, ref, watch, nextTick } from 'vue';
+import { nextTick, onBeforeUnmount, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
 import ChatMessage from './ChatMessage.vue';
 import { scrollToBottom } from '../services/chat';
 import { startSseRequest } from '../services/api';
@@ -112,6 +113,7 @@ const props = defineProps({
   }
 });
 
+const router = useRouter();
 const messages = ref([]);
 const input = ref('');
 const loading = ref(false);
@@ -241,21 +243,27 @@ function handleSubmit() {
         await handleStreamingModeChunk(chunk, aiMessage);
       }
     },
-    onError: () => {
+    onError: (error) => {
       loading.value = false;
+      const unauthorized = error?.status === 401;
+      const fallbackMessage = unauthorized ? '请先登录后再使用任务型访问。' : '连接已中断，请稍后重试。';
 
       if (!props.includeChatId && !useWebSearch) {
-        appendMessage(createMessage('assistant', '连接已中断，请稍后重试。'));
+        appendMessage(createMessage('assistant', fallbackMessage));
       } else {
         aiMessage.streaming = false;
         if (!aiMessage.content) {
-          aiMessage.content = '连接已中断，请稍后重试。';
+          aiMessage.content = fallbackMessage;
         }
         messages.value = messages.value.map(message =>
           message.id === aiMessage.id
             ? { ...message, content: aiMessage.content, streaming: aiMessage.streaming }
             : message
         );
+      }
+
+      if (unauthorized) {
+        router.push({ path: '/login', query: { redirect: router.currentRoute.value.fullPath } });
       }
     },
     onOpen: () => {

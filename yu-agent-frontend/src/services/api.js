@@ -7,6 +7,14 @@ export const http = axios.create({
   timeout: 15000
 });
 
+http.interceptors.request.use((config) => {
+  const token = localStorage.getItem('yu_travel_token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 export function createSseUrl(path, params = {}) {
   const normalizedPath = path.startsWith('/api') ? path : `${API_BASE_URL}${path}`;
   const url = new URL(normalizedPath, window.location.origin);
@@ -38,6 +46,11 @@ export function startSseRequest({ path, params, onMessage, onError, onOpen }) {
     signal: controller.signal
   };
 
+  const token = localStorage.getItem('yu_travel_token');
+  if (token) {
+    fetchOptions.headers.Authorization = `Bearer ${token}`;
+  }
+
   (async () => {
     try {
       console.log('🌐 正在发起请求...');
@@ -51,7 +64,16 @@ export function startSseRequest({ path, params, onMessage, onError, onOpen }) {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        let message = `HTTP error! status: ${response.status}`;
+        try {
+          const errorBody = await response.json();
+          message = errorBody.message || message;
+        } catch (ignore) {
+          // ignore non-json errors
+        }
+        const error = new Error(message);
+        error.status = response.status;
+        throw error;
       }
 
       console.log('✅ 开始读取响应数据...');
