@@ -19,3 +19,9 @@ CREATE TABLE IF NOT EXISTS app_user (
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
+
+ALTER TABLE app_user
+    DROP COLUMN nickname;
+ALTER TABLE app_user
+    ADD COLUMN userAccount VARCHAR(256) NOT NULL;
+

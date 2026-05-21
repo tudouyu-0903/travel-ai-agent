@@ -7,8 +7,21 @@
 
       <form class="auth-form" @submit.prevent="handleSubmit">
         <label>
-          <span>用户名</span>
-          <input v-model.trim="form.username" autocomplete="username" placeholder="至少 3 位" />
+          <span>账号</span>
+          <input
+            v-model.trim="form.userAccount"
+            autocomplete="username"
+            placeholder="至少 4 位，用于登录"
+          />
+        </label>
+
+        <label v-if="isRegister">
+          <span>昵称</span>
+          <input
+            v-model.trim="form.username"
+            autocomplete="name"
+            placeholder="展示给你的旅行助手"
+          />
         </label>
 
         <label>
@@ -17,15 +30,11 @@
             v-model="form.password"
             type="password"
             :autocomplete="isRegister ? 'new-password' : 'current-password'"
-            placeholder="至少 6 位"
+            placeholder="至少 8 位"
           />
         </label>
 
         <template v-if="isRegister">
-          <label>
-            <span>昵称</span>
-            <input v-model.trim="form.nickname" placeholder="旅行者昵称" />
-          </label>
           <label>
             <span>手机号</span>
             <input v-model.trim="form.phone" autocomplete="tel" placeholder="可选" />
@@ -65,21 +74,29 @@ const loading = ref(false);
 const errorMessage = ref('');
 
 const form = reactive({
+  userAccount: '',
   username: '',
   password: '',
-  nickname: '',
   phone: '',
   email: ''
 });
 
-async function handleSubmit() {
-  errorMessage.value = '';
-  if (!form.username || form.username.length < 3) {
-    errorMessage.value = '请输入至少 3 位用户名';
-    return;
+function validateForm() {
+  if (!form.userAccount || form.userAccount.length < 4) {
+    return '请输入至少 4 位账号';
   }
-  if (!form.password || form.password.length < 6) {
-    errorMessage.value = '请输入至少 6 位密码';
+  if (isRegister.value && !form.username) {
+    return '请输入昵称';
+  }
+  if (!form.password || form.password.length < 8) {
+    return '请输入至少 8 位密码';
+  }
+  return '';
+}
+
+async function handleSubmit() {
+  errorMessage.value = validateForm();
+  if (errorMessage.value) {
     return;
   }
 
@@ -88,7 +105,10 @@ async function handleSubmit() {
     if (isRegister.value) {
       await register({ ...form });
     } else {
-      await login({ username: form.username, password: form.password });
+      await login({
+        userAccount: form.userAccount,
+        password: form.password
+      });
     }
     router.push(route.query.redirect || '/');
   } catch (error) {

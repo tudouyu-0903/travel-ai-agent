@@ -3,7 +3,7 @@
     <div class="hero-card">
       <div class="home-auth-actions">
         <template v-if="user">
-          <span class="user-pill">{{ user.nickname || user.username }}</span>
+          <span class="user-pill">{{ user.username || user.userAccount }}</span>
           <button class="ghost-button" type="button" @click="handleLogout">退出</button>
         </template>
         <template v-else>
@@ -13,23 +13,23 @@
       </div>
 
       <p class="eyebrow">YU AI TRAVEL AGENT</p>
-      <h1>选择你的智能旅游助手入口</h1>
+      <h1>选择你的智能旅行助手入口</h1>
       <p class="hero-text">
-        一个面向旅行规划的 AI 工作台。你可以直接进入智能旅游助手获取路线、预算和行程建议；
+        一个面向旅行规划的 AI 工作台。你可以直接进入智能旅行助手，获取路线、预算和行程建议；
         任务型 Agent 会调用搜索、网页抓取、文件和 PDF 工具，因此需要登录后使用。
       </p>
 
       <div class="app-grid">
         <router-link class="app-entry love-theme" to="/travel">
           <span class="app-badge">01</span>
-          <h2>AI 智能旅游助手</h2>
+          <h2>AI 智能旅行助手</h2>
           <p>适合路线规划、城市推荐、预算拆分、每日行程安排和旅行注意事项咨询。</p>
           <span class="app-link">进入应用</span>
         </router-link>
 
         <router-link class="app-entry manus-theme" :to="manusTarget">
           <span class="app-badge">02</span>
-          <h2>旅游任务 Agent</h2>
+          <h2>旅行任务 Agent</h2>
           <p>适合联网检索、整理攻略、下载资料、生成旅行 PDF 或处理更开放的任务。</p>
           <span class="app-link">{{ user ? '进入应用' : '登录后使用' }}</span>
         </router-link>

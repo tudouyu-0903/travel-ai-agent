@@ -1,10 +1,34 @@
 import { http } from './api';
 
-const TOKEN_KEY = 'yu_travel_token';
 const USER_KEY = 'yu_travel_user';
 
-export function getAuthToken() {
-  return localStorage.getItem(TOKEN_KEY);
+function unwrapResponse(response) {
+  const body = response.data;
+  if (body && typeof body === 'object' && 'code' in body) {
+    if (body.code !== 0) {
+      throw new Error(body.message || '请求失败');
+    }
+    return body.data;
+  }
+  return body;
+}
+
+function sanitizeUser(user) {
+  if (!user) {
+    return null;
+  }
+
+  const { passwordHash, ...safeUser } = user;
+  return safeUser;
+}
+
+function saveAuthSession(user) {
+  const safeUser = sanitizeUser(user);
+  if (safeUser) {
+    localStorage.setItem(USER_KEY, JSON.stringify(safeUser));
+  }
+  window.dispatchEvent(new Event('auth-changed'));
+  return safeUser;
 }
 
 export function getCurrentUser() {
@@ -21,32 +45,33 @@ export function getCurrentUser() {
 }
 
 export function isAuthenticated() {
-  return Boolean(getAuthToken());
-}
-
-function saveAuthSession(data) {
-  localStorage.setItem(TOKEN_KEY, data.token);
-  localStorage.setItem(USER_KEY, JSON.stringify(data.user));
-  window.dispatchEvent(new Event('auth-changed'));
-  return data.user;
+  return Boolean(getCurrentUser());
 }
 
 export async function login(payload) {
-  const { data } = await http.post('/auth/login', payload);
-  return saveAuthSession(data);
+  const user = unwrapResponse(await http.post('/user/login', {
+    userAccount: payload.userAccount,
+    password: payload.password
+  }));
+  return saveAuthSession(user);
 }
 
 export async function register(payload) {
-  const { data } = await http.post('/auth/register', payload);
-  return saveAuthSession(data);
+  unwrapResponse(await http.post('/user/register', {
+    userAccount: payload.userAccount,
+    username: payload.username,
+    password: payload.password,
+    phone: payload.phone || undefined,
+    email: payload.email || undefined
+  }));
+
+  return login({
+    userAccount: payload.userAccount,
+    password: payload.password
+  });
 }
 
 export async function logout() {
-  try {
-    await http.post('/auth/logout');
-  } finally {
-    localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(USER_KEY);
-    window.dispatchEvent(new Event('auth-changed'));
-  }
+  localStorage.removeItem(USER_KEY);
+  window.dispatchEvent(new Event('auth-changed'));
 }

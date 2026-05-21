@@ -4,15 +4,8 @@ export const API_BASE_URL = '/api';
 
 export const http = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 15000
-});
-
-http.interceptors.request.use((config) => {
-  const token = localStorage.getItem('yu_travel_token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
+  timeout: 15000,
+  withCredentials: true
 });
 
 export function createSseUrl(path, params = {}) {
@@ -43,13 +36,9 @@ export function startSseRequest({ path, params, onMessage, onError, onOpen }) {
     headers: {
       'Accept': 'text/event-stream'
     },
+    credentials: 'include',
     signal: controller.signal
   };
-
-  const token = localStorage.getItem('yu_travel_token');
-  if (token) {
-    fetchOptions.headers.Authorization = `Bearer ${token}`;
-  }
 
   (async () => {
     try {
